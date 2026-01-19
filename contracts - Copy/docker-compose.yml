@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3335:3335"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=${PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+    restart: always

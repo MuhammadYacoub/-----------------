@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - بوابة التوظيف | هيئة قضايا الدولة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #b38f00;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-light: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .nav-brand img {
+            height: 40px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .nav-actions button {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .nav-actions button:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Profile Card */
+        .profile-header {
+            text-align: center;
+        }
+
+        .profile-img-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px #e2e8f0;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            background: #cbd5e1;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .applicant-name {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 5px 0;
+            color: #1e293b;
+        }
+
+        .job-tag {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .info-list {
+            margin-top: 25px;
+            text-align: right;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .value {
+            font-weight: 600;
+            color: #334155;
+        }
+
+        /* Status Tracker */
+        .status-timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .stepper-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Simple status box instead of complex stepper for MVP */
+        .status-box {
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-box.submitted {
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+        }
+
+        .status-box.review {
+            background: #fefce8;
+            border: 1px solid #fde047;
+        }
+
+        .status-box.accepted {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+        }
+
+        .status-box.rejected {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+        }
+
+        .status-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .submitted .status-icon {
+            color: #0284c7;
+        }
+
+        .review .status-icon {
+            color: #ca8a04;
+        }
+
+        .accepted .status-icon {
+            color: #16a34a;
+        }
+
+        .rejected .status-icon {
+            color: #dc2626;
+        }
+
+        .status-content h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+
+        .status-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #475569;
+        }
+
+
+        /* Tabs for Details */
+        .tabs {
+            display: flex;
+            gap: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading" class="loading-overlay">
+        <div
+            style="width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #003366; border-radius: 50%; animation: spin 1s linear infinite;">
+        </div>
+        <p style="margin-top: 20px; font-weight: 600;">جاري تحميل البيانات...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="images/logo.png" alt="Logo"
+                    onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/25/State_Lawsuits_Authority_Logo.png'">
+                <span>هيئة قضايا الدولة</span>
+            </div>
+            <div class="nav-actions">
+                <span id="navName" style="margin-left: 15px; font-size: 14px;">مرحباً، ...</span>
+                <button onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> خروج
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Sidebar: Personal Info -->
+        <aside>
+            <div class="card">
+                <div class="profile-header">
+                    <div class="profile-img-container">
+                        <img id="profileImage" src="" alt="صورة المتقدم"
+                            onerror="this.src='https://via.placeholder.com/150/003366/FFFFFF?text=USER'">
+                    </div>
+                    <h2 id="fullName" class="applicant-name">...</h2>
+                    <span id="jobType" class="job-tag">...</span>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="label">الرقم القومي</span>
+                        <span class="value" id="nationalId">...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">تاريخ التقديم</span>
+                        <span class="value" id="applyDate">...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">رقم الطلب</span>
+                        <span class="value" id="appId" style="font-family: monospace;">...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fas fa-address-card"></i> معلومات الاتصال</div>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="label">المحافظة</span>
+                        <span class="value" id="governorate">...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">العنوان</span>
+                        <span class="value" id="address">...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">البريد</span>
+                        <span class="value" id="email">...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">الهاتف</span>
+                        <span class="value" id="phone">...</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Status Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-tasks"></i> حالة الطلب</h3>
+                    <button class="btn-refresh" onclick="location.reload()"
+                        style="background:none; border:none; cursor:pointer; color:var(--primary);"><i
+                            class="fas fa-sync-alt"></i></button>
+                </div>
+
+                <div id="statusBox" class="status-box submitted">
+                    <div class="status-icon">
+                        <i id="statusIcon" class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="status-content">
+                        <h3 id="statusTitle">تم تقديم الطلب بنجاح</h3>
+                        <p id="statusDesc">طلبك حالياً قيد المراجعة الأولية من قبل اللجنة المختصة.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Tabs -->
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('education')">المؤهلات والخبرات</button>
+                    <button class="tab-btn" onclick="switchTab('files')">المرفقات</button>
+                </div>
+
+                <div id="education" class="tab-content active">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="label">المؤهل الدراسي</span>
+                            <span class="value" id="qualification">...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">جهة التخرج</span>
+                            <span class="value" id="eduEntity">...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">سنة التخرج</span>
+                            <span class="value" id="gradYear">...</span>
+                        </div>
+                        <div class="info-item" style="display:block">
+                            <span class="label" style="display:block; margin-bottom:5px">سنوات الخبرة</span>
+                            <span class="value" id="expYears">...</span>
+                        </div>
+                        <div class="info-item" style="display:block">
+                            <span class="label" style="display:block; margin-bottom:5px">جهة العمل السابقة</span>
+                            <div class="value" id="prevWork"
+                                style="background:#f8fafc; padding:10px; border-radius:8px; line-height:1.6">...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="files" class="tab-content">
+                    <div style="display: flex; gap: 20px;">
+                        <div
+                            style="flex:1; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 12px; text-align: center;">
+                            <i class="fas fa-file-pdf"
+                                style="font-size: 40px; color: #ef4444; margin-bottom: 10px;"></i>
+                            <h4>ملف المستندات</h4>
+                            <a id="fileLink" href="#" target="_blank"
+                                style="display:inline-block; margin-top:10px; padding: 8px 15px; background:var(--primary); color:white; text-decoration:none; border-radius:6px; font-size:14px;">عرض
+                                الملف</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const API_URL = '';
+
+        // Auth Check
+        const token = localStorage.getItem('applicant_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Fetch Data
+        async function loadProfile() {
+            try {
+                const res = await axios.get(`${API_URL}/applications/my-profile`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.data.success) {
+                    renderProfile(res.data.data);
+                }
+            } catch (err) {
+                if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                    logout();
+                }
+                console.error(err);
+                alert('فشل تحميل البيانات');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function renderProfile(data) {
+            // Header
+            document.getElementById('navName').textContent = `مرحباً، ${data.FullName.split(' ')[0]}`;
+            document.getElementById('fullName').textContent = data.FullName;
+            document.getElementById('jobType').textContent = getJobLabel(data.JobType);
+
+            // Image
+            if (data.ProfileImagePath) {
+                document.getElementById('profileImage').src = data.ProfileImagePath.replace(/\\/g, '/'); // Fix windows paths
+            }
+
+            // Sidebar Info
+            document.getElementById('nationalId').textContent = data.NationalId;
+            document.getElementById('applyDate').textContent = new Date(data.CreatedAt).toLocaleDateString('ar-EG');
+            document.getElementById('appId').textContent = data.Id; // Real logic: SLA-202X-{ID}
+
+            // Contact Info
+            document.getElementById('governorate').textContent = data.Governorate;
+            document.getElementById('address').textContent = data.Address;
+            document.getElementById('email').textContent = data.Email;
+            document.getElementById('phone').textContent = data.Phone;
+
+            // Education
+            document.getElementById('qualification').textContent = data.Qualification;
+            document.getElementById('eduEntity').textContent = data.EducationEntity;
+            document.getElementById('gradYear').textContent = data.GraduationYear;
+            document.getElementById('expYears').textContent = data.ExperienceYears;
+            document.getElementById('prevWork').textContent = data.PreviousWork || 'لا يوجد';
+
+            // Files
+            if (data.FilePath) {
+                document.getElementById('fileLink').href = data.FilePath.replace(/\\/g, '/');
+            }
+
+            // Status Logic
+            updateStatusUI(data.Status);
+        }
+
+        function getJobLabel(type) {
+            const map = {
+                'legal': 'وظيفة قانونية',
+                'driver': 'سائق',
+                'admin': 'إداري',
+                'tech': 'فني'
+            };
+            return map[type] || type;
+        }
+
+        function updateStatusUI(status) {
+            const box = document.getElementById('statusBox');
+            const title = document.getElementById('statusTitle');
+            const desc = document.getElementById('statusDesc');
+            const icon = document.getElementById('statusIcon');
+
+            // Reset classes
+            box.className = 'status-box';
+
+            // Mapping (Case insensitive)
+            const s = (status || 'Submitted').toLowerCase();
+
+            if (s === 'submitted') {
+                box.classList.add('submitted');
+                title.textContent = 'تم استلام الطلب';
+                desc.textContent = 'طلبك قيد المراجعة المبدئية. سنوافيك بالتحديثات قريباً.';
+                icon.className = 'fas fa-check-circle'; // Should be check? Or paper plane.
+            } else if (s === 'under review') {
+                box.classList.add('review');
+                title.textContent = 'قيد الفحص';
+                desc.textContent = 'يتم الآن فحص مستنداتك ومؤهلاتك من قبل لجنة الفرز.';
+                icon.className = 'fas fa-search';
+            } else if (s === 'accepted' || s === 'shortlisted') {
+                box.classList.add('accepted');
+                title.textContent = 'تم القبول المبدئي';
+                desc.textContent = 'مبروك! تم قبولك مبدئياً. يرجى انتظار موعد الاختبار/المقابلة.';
+                icon.className = 'fas fa-star';
+            } else if (s === 'rejected') {
+                box.classList.add('rejected');
+                title.textContent = 'تم رفض الطلب';
+                desc.textContent = 'للأسف لم يتم قبول طلبك لعدم استيفاء الشروط.';
+                icon.className = 'fas fa-times-circle';
+            } else {
+                box.classList.add('submitted');
+                title.textContent = s;
+                desc.textContent = 'حالة الطلب: ' + s;
+            }
+        }
+
+        function switchTab(tabId) {
+            // Remove active
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            // Add active
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function logout() {
+            localStorage.removeItem('applicant_token');
+            localStorage.removeItem('applicant_name');
+            localStorage.removeItem('has_password');
+            window.location.href = 'login.html';
+        }
+
+        // ========== SET PASSWORD MODAL ==========
+        function showSetPasswordModal() {
+            document.getElementById('setPasswordModal').style.display = 'flex';
+        }
+
+        function hideSetPasswordModal() {
+            document.getElementById('setPasswordModal').style.display = 'none';
+        }
+
+        async function submitSetPassword() {
+            const pwd = document.getElementById('newPwd').value;
+            const confirmPwd = document.getElementById('confirmPwd').value;
+            const errBox = document.getElementById('pwdError');
+
+            if (pwd.length < 6) {
+                errBox.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                errBox.style.display = 'block';
+                return;
+            }
+            if (pwd !== confirmPwd) {
+                errBox.textContent = 'كلمات المرور غير متطابقة';
+                errBox.style.display = 'block';
+                return;
+            }
+
+            const token = localStorage.getItem('applicant_token');
+            try {
+                const res = await axios.post('/auth/applicant/set-password',
+                    { password: pwd, confirmPassword: confirmPwd },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                if (res.data.success) {
+                    localStorage.setItem('has_password', 'true');
+                    hideSetPasswordModal();
+                    alert('تم تعيين كلمة المرور بنجاح!');
+                }
+            } catch (err) {
+                errBox.textContent = err.response?.data?.message || 'حدث خطأ';
+                errBox.style.display = 'block';
+            }
+        }
+
+        // Check if user needs to set password
+        async function checkSetPasswordPrompt() {
+            const hasPassword = localStorage.getItem('has_password');
+            if (hasPassword === 'false' || hasPassword === null) {
+                // Give a small delay then show modal
+                setTimeout(() => {
+                    showSetPasswordModal();
+                }, 1000);
+            }
+        }
+
+        // Init
+        loadProfile();
+        checkSetPasswordPrompt();
+
+    </script>
+
+    <!-- Set Password Modal -->
+    <div id="setPasswordModal"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+        <div
+            style="background: white; border-radius: 16px; padding: 30px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <i class="fas fa-lock" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
+            <h2 style="margin: 0 0 10px; color: var(--primary);">تأمين حسابك</h2>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">قم بتعيين كلمة مرور للدخول السريع في المرات
+                القادمة</p>
+
+            <div id="pwdError"
+                style="display: none; background: #fef2f2; color: #ef4444; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px;">
+            </div>
+
+            <div style="margin-bottom: 15px; text-align: right;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px;">كلمة المرور
+                    الجديدة</label>
+                <input type="password" id="newPwd" placeholder="6 أحرف على الأقل"
+                    style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 20px; text-align: right;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px;">تأكيد كلمة
+                    المرور</label>
+                <input type="password" id="confirmPwd" placeholder="أعد إدخال كلمة المرور"
+                    style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box;">
+            </div>
+
+            <button onclick="submitSetPassword()"
+                style="width: 100%; padding: 14px; background: linear-gradient(90deg, #003366, #004d99); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif;">تعيين
+                كلمة المرور</button>
+            <button onclick="hideSetPasswordModal()"
+                style="margin-top: 10px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 14px;">تخطي
+                الآن</button>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة القيادة | نظام التوظيف</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans h-screen overflow-hidden flex">
+
+    <!-- Login Modal -->
+    <div id="login-modal"
+        class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex items-center justify-center transition-opacity duration-300">
+        <div
+            class="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md transform scale-100 transition-transform duration-300">
+            <div class="text-center mb-8">
+                <div class="w-full h-24 flex items-center justify-center mx-auto mb-4">
+                    <img src="images/logo.png" alt="شعار النظام" class="h-full object-contain">
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">تسجيل دخول المسؤول</h2>
+                <p class="text-slate-500 mt-2">يرجى إدخال كلمة المرور للمتابعة</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">كلمة المرور</label>
+                    <input type="password" id="admin-pass"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all outline-none"
+                        placeholder="••••••••">
+                </div>
+                <button onclick="adminLogin()"
+                    class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20">
+                    دخول للنظام
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="main-sidebar"
+        class="w-72 bg-slate-900 text-white flex-col hidden md:flex h-full shadow-xl z-20 fixed md:relative transition-transform duration-300">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 flex items-center justify-center p-1 bg-white rounded-lg">
+                    <img src="images/logo.png" alt="شعار النظام" class="h-full object-contain">
+                </div>
+                <span class="font-bold text-lg tracking-wide">نظام التوظيف</span>
+            </div>
+            <button class="md:hidden text-slate-400 hover:text-white" onclick="toggleSidebar()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">الرئيسية</p>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 bg-primary-600/10 text-primary-400 rounded-xl border border-primary-600/20 transition-all">
+                <i class="fa-solid fa-chart-pie w-5"></i>
+                <span class="font-medium">لوحة المعلومات</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl transition-all">
+                <i class="fa-solid fa-users w-5"></i>
+                <span class="font-medium">المتقدمين</span>
+            </a>
+
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-8 mb-2">الإدارة</p>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl transition-all">
+                <i class="fa-solid fa-file-export w-5"></i>
+                <span class="font-medium">تقارير وتصدير</span>
+            </a>
+            <a href="#"
+                class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl transition-all">
+                <i class="fa-solid fa-gear w-5"></i>
+                <span class="font-medium">الإعدادات</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="adminLogout()"
+                class="flex items-center gap-3 px-4 py-3 w-full text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all">
+                <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+                <span class="font-medium">تسجيل خروج</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div id="dashboard-content" class="flex-1 flex flex-col min-w-0 hidden h-full">
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-slate-700" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-bold text-slate-800">نظرة عامة</h1>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="relative p-2 text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span
+                        class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-slate-200 mx-1"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-left hidden sm:block">
+                        <p class="text-sm font-bold text-slate-700">المسؤول العام</p>
+                        <p class="text-xs text-slate-500">Admin</p>
+                    </div>
+                    <div
+                        class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden">
+                        <i class="fa-solid fa-user text-slate-400"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <main class="flex-1 overflow-auto p-6 md:p-8">
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Total Card -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start justify-between group hover:shadow-md transition-shadow">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium mb-1">إجمالي الطلبات</p>
+                        <h3 class="text-3xl font-bold text-slate-800" id="stat-total">0</h3>
+                        <p class="text-emerald-500 text-xs mt-2 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                            <span>محدث الآن</span>
+                        </p>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                </div>
+
+                <!-- Approved Card -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start justify-between group hover:shadow-md transition-shadow">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium mb-1">المقبولين مبدئياً</p>
+                        <h3 class="text-3xl font-bold text-slate-800" id="stat-approved">0</h3>
+                        <div class="w-full bg-gray-100 h-1.5 rounded-full mt-3 overflow-hidden">
+                            <div class="bg-emerald-500 h-full rounded-full" style="width: 0%" id="stat-approved-bar">
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </div>
+                </div>
+
+                <!-- Pending Card -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start justify-between group hover:shadow-md transition-shadow">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium mb-1">قيد المراجعة</p>
+                        <h3 class="text-3xl font-bold text-slate-800" id="stat-pending">0</h3>
+                        <div class="w-full bg-gray-100 h-1.5 rounded-full mt-3 overflow-hidden">
+                            <div class="bg-amber-500 h-full rounded-full" style="width: 0%" id="stat-pending-bar"></div>
+                        </div>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-filter text-primary-500"></i>
+                        تصفية وبحث متقدم
+                    </h2>
+                    <button onclick="resetFilters()"
+                        class="text-sm text-rose-500 font-medium hover:text-rose-700 hover:underline">
+                        إعادة تعيين
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Search Text -->
+                    <div class="relative col-span-1 md:col-span-2 lg:col-span-1">
+                        <i class="fa-solid fa-search absolute right-3 top-3.5 text-slate-400"></i>
+                        <input type="text" id="search-input"
+                            class="w-full pr-10 pl-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-100 focus:border-primary-500 outline-none transition-all text-sm"
+                            placeholder="بحث بالاسم، الرقم القومي..." oninput="debounceSearch()">
+                    </div>
+
+                    <!-- Job Filter -->
+                    <select id="filter-job" onchange="applyFilters()"
+                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-100 focus:border-primary-500 outline-none transition-all text-sm appearance-none cursor-pointer">
+                        <option value="">كل الوظائف</option>
+                        <option value="clerk">منتدب - كاتب</option>
+                        <option value="legal">باحث قانوني</option>
+                        <option value="driver">سائق</option>
+                    </select>
+
+                    <!-- Gov Filter -->
+                    <select id="filter-gov" onchange="applyFilters()"
+                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-100 focus:border-primary-500 outline-none transition-all text-sm appearance-none cursor-pointer">
+                        <option value="">كل المحافظات</option>
+                        <!-- JS populated -->
+                    </select>
+
+                    <!-- Status Filter -->
+                    <select id="filter-status" onchange="applyFilters()"
+                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-100 focus:border-primary-500 outline-none transition-all text-sm appearance-none cursor-pointer">
+                        <option value="">كل الحالات</option>
+                        <option value="Pending">قيد المراجعة</option>
+                        <option value="Approved">مقبول مبدئياً</option>
+                        <option value="Rejected">مرفوض</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Enhanced Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right">
+                        <thead
+                            class="bg-slate-50 text-slate-500 text-xs font-semibold uppercase tracking-wider border-b border-slate-100">
+                            <tr>
+                                <th class="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+                                    onclick="sortBy('Id')">
+                                    رقم الطلب <i
+                                        class="fa-solid fa-sort text-slate-300 group-hover:text-slate-500 ml-1"></i>
+                                </th>
+                                <th class="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+                                    onclick="sortBy('FullName')">
+                                    المتقدم <i
+                                        class="fa-solid fa-sort text-slate-300 group-hover:text-slate-500 ml-1"></i>
+                                </th>
+                                <th class="px-6 py-4">معلومات الاتصال</th>
+                                <th class="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+                                    onclick="sortBy('JobType')">
+                                    الوظيفة والمؤهل <i
+                                        class="fa-solid fa-sort text-slate-300 group-hover:text-slate-500 ml-1"></i>
+                                </th>
+                                <th class="px-6 py-4 cursor-pointer hover:bg-slate-100 transition-colors group"
+                                    onclick="sortBy('Status')">
+                                    الحالة <i
+                                        class="fa-solid fa-sort text-slate-300 group-hover:text-slate-500 ml-1"></i>
+                                </th>
+                                <th class="px-6 py-4">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="divide-y divide-slate-50">
+                            <!-- JS populated -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+                    <p class="text-sm text-slate-500">عرض <span id="showing-count"
+                            class="font-bold text-slate-800">0</span> من <span id="total-results"
+                            class="font-bold text-slate-800">0</span> نتيجة</p>
+                    <div class="flex items-center gap-2" id="pagination-controls">
+                        <!-- JS populated -->
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Details Modal (Slide over) -->
+    <div id="details-modal" class="hidden fixed inset-0 z-50 overflow-hidden" aria-labelledby="slide-over-title"
+        role="dialog" aria-modal="true">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal()">
+            </div>
+            <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pl-10 sm:pl-16">
+                <div class="pointer-events-auto w-screen max-w-2xl transform transition ease-in-out duration-500 sm:duration-700 translate-x-full sm:translate-x-0"
+                    id="modal-panel">
+                    <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                        <div class="px-4 py-6 sm:px-6 bg-slate-50 border-b border-slate-100">
+                            <div class="flex items-start justify-between">
+                                <h2 class="text-lg font-bold text-slate-900" id="slide-over-title">تفاصيل الطلب</h2>
+                                <div class="ml-3 flex h-7 items-center">
+                                    <button type="button"
+                                        class="rounded-md bg-white text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                                        onclick="closeModal()">
+                                        <span class="sr-only">Close panel</span>
+                                        <i class="fa-solid fa-xmark text-xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative flex-1 px-4 py-6 sm:px-6" id="modal-content">
+                            <!-- Content injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

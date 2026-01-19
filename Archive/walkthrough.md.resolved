@@ -1,0 +1,40 @@
+# Walkthrough - Registration Form Updates
+
+I have successfully updated the registration form with the requested changes.
+
+## Changes Implemented
+
+### 1. OTP via Email
+*   **Change**: Replaced the "Phone Number" input with an "Email" input in the verification step.
+*   **Logic**: The OTP simulation now validates the email format instead of phone number length. The message explicitly states the OTP is sent to the email.
+
+### 2. Driver Gender Restriction
+*   **Change**: Added validation logic for the "Driver" (سائق) job type.
+*   **Logic**: When a user applies for a Driver position, the system checks the 13th digit of the National ID.
+    *   **Odd Digit**: Male (Allowed)
+    *   **Even Digit**: Female (Blocked with an error message: "عذراً، وظيفة سائق متاحة للذكور فقط")
+
+### 3. New Experience & Skills Fields
+*   **Change**: Added a new section "الخبرات والمهارات" (Experience & Skills) to the application form.
+*   **Fields Added**:
+    *   **العمل السابق** (Previous Work)
+    *   **سنوات الخبرة** (Years of Experience)
+    *   **المهام الوظيفية السابقة** (Previous Tasks)
+    *   **المهارات** (Skills)
+
+## How to Verify
+
+1.  **Open [index.html](file:///d:/Work/%D8%AA%D9%82%D8%AF%D9%8A%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%A7%D8%AF%D8%A7%D8%B1%D9%8A%D9%8A%D9%86/index.html)** in your browser.
+2.  **Test OTP**:
+    *   Enter a valid National ID (14 digits).
+    *   Enter a valid Email (e.g., `test@example.com`).
+    *   Click "إرسال رمز التحقق". It should proceed to the OTP entry screen.
+3.  **Test Driver Restriction**:
+    *   Go back and select "سائق".
+    *   Enter a National ID with an **even** 13th digit (e.g., `2900101123428`).
+    *   Click "إرسال رمز التحقق". You should see an error message.
+    *   Change the 13th digit to **odd** (e.g., `2900101123418`). It should proceed.
+4.  **Test New Fields**:
+    *   Complete the OTP step.
+    *   In the main form, scroll down to find the new "الخبرات والمهارات" section.
+    *   Fill in the fields and submit the form.

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - بوابة التوظيف | هيئة قضايا الدولة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> <!-- Assuming base styles exist, filtering below -->
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #b38f00;
+            /* Gold */
+            --accent: #e6b800;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 51, 102, 0.15);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 100px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .title {
+            color: var(--primary);
+            font-weight: 800;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .input-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1);
+        }
+
+        .input-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+            font-size: 18px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary) 0%, #004d99 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 51, 102, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 51, 102, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Steps Animation */
+        .step-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .otp-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            direction: ltr;
+            /* OTP is numeric left-to-right usually */
+        }
+
+        .otp-inputs input {
+            width: 45px;
+            height: 55px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .otp-inputs input:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        .alert-message {
+            background-color: #fef2f2;
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #fee2e2;
+        }
+
+        .back-link {
+            margin-top: 20px;
+            display: inline-block;
+            font-size: 13px;
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        /* Loader */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-header">
+            <img src="images/logo.png" alt="Logo" class="logo"
+                onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/2/25/State_Lawsuits_Authority_Logo.png'">
+            <h1 class="title">متابعة طلب التوظيف</h1>
+            <p class="subtitle" id="headerSub">سجل دخولك لمتابعة حالة طلبك</p>
+        </div>
+
+        <div id="alertBox" class="alert-message">
+            <i class="fas fa-exclamation-circle"></i> <span id="alertText">حدث خطأ ما</span>
+        </div>
+
+        <!-- Login Method Tabs -->
+        <div class="login-tabs" id="loginTabs" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button type="button" class="tab-btn active" data-tab="otp"
+                style="flex:1; padding: 12px; border: 2px solid var(--primary); background: var(--primary); color: white; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                <i class="fas fa-envelope"></i> دخول بـ OTP
+            </button>
+            <button type="button" class="tab-btn" data-tab="password"
+                style="flex:1; padding: 12px; border: 2px solid #e2e8f0; background: white; color: var(--text-dark); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                <i class="fas fa-lock"></i> دخول بكلمة المرور
+            </button>
+        </div>
+
+        <!-- Step 1: National ID (OTP Flow) -->
+        <div id="step1" class="step-container active" data-flow="otp">
+            <form id="idForm">
+                <div class="input-group">
+                    <label>الرقم القومي</label>
+                    <div class="input-box">
+                        <input type="text" id="nationalId" maxlength="14"
+                            placeholder="أدخل رقمك القومي المكون من 14 رقم" required pattern="[0-9]{14}">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" id="btnSendOtp">
+                    <span class="btn-text">إرسال رمز التحقق</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+            <a href="index.html" class="back-link">العودة للرئيسية</a>
+        </div>
+
+        <!-- Step 1B: Password Login -->
+        <div id="stepPassword" class="step-container" data-flow="password">
+            <form id="passwordForm">
+                <div class="input-group">
+                    <label>الرقم القومي</label>
+                    <div class="input-box">
+                        <input type="text" id="nationalIdPwd" maxlength="14" placeholder="الرقم القومي" required
+                            pattern="[0-9]{14}">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>كلمة المرور</label>
+                    <div class="input-box">
+                        <input type="password" id="passwordInput" placeholder="كلمة المرور" required minlength="6">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" id="btnPasswordLogin">
+                    <span class="btn-text">تسجيل الدخول</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+            <a href="reset-password.html" class="back-link" style="color: var(--secondary); font-weight: 600;">
+                <i class="fas fa-key"></i> نسيت كلمة المرور؟
+            </a>
+            <br>
+            <a href="index.html" class="back-link">العودة للرئيسية</a>
+        </div>
+
+        <!-- Step 2: OTP -->
+        <div id="step2" class="step-container">
+            <p style="font-size:14px; margin-bottom: 20px; color: #64748b;">
+                تم إرسال رمز التحقق إلى البريد الإلكتروني: <br>
+                <strong dir="ltr" id="maskedEmail" style="color:var(--primary)">...</strong>
+            </p>
+
+            <form id="otpForm">
+                <div class="input-group" style="text-align: center;">
+                    <div class="otp-inputs" id="otpContainer">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" id="btnLogin">
+                    <span class="btn-text">تأكيد الدخول</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+            <a href="#" id="changeNumber" class="back-link">تغيير الرقم القومي</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const API_URL = '';
+
+        // DOM Elements
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const idForm = document.getElementById('idForm');
+        const otpForm = document.getElementById('otpForm');
+        const nationalIdInput = document.getElementById('nationalId');
+        const maskedEmailSpan = document.getElementById('maskedEmail');
+        const alertBox = document.getElementById('alertBox');
+        const alertText = document.getElementById('alertText');
+        const btnSendOtp = document.getElementById('btnSendOtp');
+        const btnLogin = document.getElementById('btnLogin');
+        const otpInputs = document.querySelectorAll('.otp-inputs input');
+
+        // State
+        let currentNationalId = '';
+
+        // Helper: Show Alert
+        function showAlert(msg) {
+            alertText.textContent = msg;
+            alertBox.style.display = 'block';
+            setTimeout(() => { alertBox.style.display = 'none'; }, 5000);
+        }
+
+        // Helper: Loading State
+        function setLoading(btn, isLoading) {
+            const span = btn.querySelector('.btn-text');
+            const spinner = btn.querySelector('.spinner');
+            if (isLoading) {
+                span.style.display = 'none';
+                spinner.style.display = 'block';
+                btn.disabled = true;
+            } else {
+                span.style.display = 'block';
+                spinner.style.display = 'none';
+                btn.disabled = false;
+            }
+        }
+
+        // Step 1: Send OTP
+        idForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nid = nationalIdInput.value.trim();
+
+            if (nid.length !== 14 || isNaN(nid)) {
+                showAlert('الرجاء إدخال رقم قومي صحيح');
+                return;
+            }
+
+            setLoading(btnSendOtp, true);
+            alertBox.style.display = 'none';
+
+            try {
+                const res = await axios.post(`${API_URL}/auth/applicant/initiate-login`, { nationalId: nid });
+
+                if (res.data.success) {
+                    currentNationalId = nid;
+                    maskedEmailSpan.textContent = res.data.email;
+
+                    // Transition
+                    step1.classList.remove('active');
+                    step2.classList.add('active');
+                    otpInputs[0].focus();
+                }
+            } catch (err) {
+                const msg = err.response?.data?.message || 'فشل الاتصال بالخادم';
+                showAlert(msg);
+            } finally {
+                setLoading(btnSendOtp, false);
+            }
+        });
+
+        // Step 2: OTP Logic (Auto Focus)
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (input.value.length === 1) {
+                    if (index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value.length === 0) {
+                    if (index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                }
+            });
+        });
+
+        // Step 2: Verify OTP
+        otpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Collect OTP
+            let otp = '';
+            otpInputs.forEach(inp => otp += inp.value);
+
+            if (otp.length !== 6) {
+                showAlert('الرجاء إدخال الرمز كاملاً');
+                return;
+            }
+
+            setLoading(btnLogin, true);
+            alertBox.style.display = 'none';
+
+            try {
+                const res = await axios.post(`${API_URL}/auth/applicant/login`, {
+                    nationalId: currentNationalId,
+                    code: otp
+                });
+
+                if (res.data.success) {
+                    // Save Token
+                    localStorage.setItem('applicant_token', res.data.token);
+                    localStorage.setItem('applicant_name', res.data.fullName);
+
+                    // Redirect
+                    window.location.href = 'profile.html';
+                }
+            } catch (err) {
+                const msg = err.response?.data?.message || 'رمز التحقق غير صحيح';
+                showAlert(msg);
+            } finally {
+                setLoading(btnLogin, false);
+            }
+        });
+
+        // Back Handler
+        document.getElementById('changeNumber').addEventListener('click', (e) => {
+            e.preventDefault();
+            step2.classList.remove('active');
+            step1.classList.add('active');
+            document.getElementById('loginTabs').style.display = 'flex';
+            otpInputs.forEach(i => i.value = '');
+        });
+
+        // ========== TAB SWITCHING ==========
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const stepPassword = document.getElementById('stepPassword');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.style.background = 'white';
+                    b.style.color = 'var(--text-dark)';
+                    b.style.borderColor = '#e2e8f0';
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                btn.style.background = 'var(--primary)';
+                btn.style.color = 'white';
+                btn.style.borderColor = 'var(--primary)';
+
+                const tab = btn.dataset.tab;
+                step1.classList.remove('active');
+                step2.classList.remove('active');
+                stepPassword.classList.remove('active');
+
+                if (tab === 'otp') {
+                    step1.classList.add('active');
+                } else if (tab === 'password') {
+                    stepPassword.classList.add('active');
+                }
+            });
+        });
+
+        // ========== PASSWORD LOGIN ==========
+        const passwordForm = document.getElementById('passwordForm');
+        const btnPasswordLogin = document.getElementById('btnPasswordLogin');
+
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nid = document.getElementById('nationalIdPwd').value.trim();
+            const pwd = document.getElementById('passwordInput').value;
+
+            if (nid.length !== 14 || isNaN(nid)) {
+                showAlert('الرجاء إدخال رقم قومي صحيح');
+                return;
+            }
+            if (pwd.length < 6) {
+                showAlert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+
+            setLoading(btnPasswordLogin, true);
+            alertBox.style.display = 'none';
+
+            try {
+                const res = await axios.post(`${API_URL}/auth/applicant/login`, {
+                    nationalId: nid,
+                    password: pwd
+                });
+
+                if (res.data.success) {
+                    localStorage.setItem('applicant_token', res.data.token);
+                    localStorage.setItem('applicant_name', res.data.fullName);
+                    localStorage.setItem('has_password', 'true');
+                    window.location.href = 'profile.html';
+                }
+            } catch (err) {
+                const msg = err.response?.data?.message || 'فشل تسجيل الدخول';
+                showAlert(msg);
+            } finally {
+                setLoading(btnPasswordLogin, false);
+            }
+        });
+
+    </script>
+</body>
+
+</html>
